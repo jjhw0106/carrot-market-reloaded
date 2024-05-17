@@ -3,9 +3,10 @@ interface FormInputPorps {
   placeholder: string;
   required: boolean;
   errors: string[];
+  name: string
 }
 
-export default function FormInput({type, placeholder, required, errors}: FormInputPorps) {
+export default function FormInput({type, placeholder, required, errors, name}: FormInputPorps) {
   return <div>
     <input className="
       bg-transparent
@@ -16,10 +17,13 @@ export default function FormInput({type, placeholder, required, errors}: FormInp
       type={type} 
       placeholder={placeholder} 
       required={required} 
+      name={name}
     />
     {errors.map(
       (error, index)=>
-        <span key={index} className="text-red-500 font-medium hidden peer-invalid:block">{error}</span>
+        <span key={index} className="text-red-500 font-medium invisible peer-invalid:visible">
+          {error}
+        </span>
     )}
   </div>
 }
