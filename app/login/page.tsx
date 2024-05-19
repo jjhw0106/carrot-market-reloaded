@@ -1,8 +1,12 @@
+"use client";
 import FormButton from "@/components/form-button";
+import FormButtonInterface from "@/components/form-button";
 import FormInput from "@/components/inputs/form-input";
 import SocialLogin from "@/components/social-login";
 import Link from "next/link";
-import { useFormStatus } from "react-dom";
+import { redirect } from "next/navigation";
+import { useFormState, useFormStatus } from "react-dom";
+import { handleForm } from "./actions";
 
 function Login() {
 
@@ -19,24 +23,21 @@ function Login() {
   //   console.log(await response)
   // };
 
-  const handleForm = async (formData: FormData) => {
-    "use server";
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    console.log("logged in!");
-  }
-  const {pending} = useFormStatus();
+  
+  const [state, action] = useFormState(handleForm, {msg: 'error'} as any)
+
   return(
     <div className="flex flex-col gap-10 py-8 px-6">
       <div className="flex flex-col gap-2 *:font-medium">
         <h1 className="text-2xl">안녕하세요!</h1>
         <h2 className="text-xl">Fill in the form below to join!</h2>
       </div>
-      <form action={handleForm} className="flex flex-col gap-3">
+      <form action={action} className="flex flex-col gap-3">
         <div className="flex flex-col gap-3">
-          <FormInput type="email" name="email" placeholder="Email" required errors={["필수 입력"]}/>
-          <FormInput type="password" name="password" placeholder="Password Confirm" required errors={["필수 입력"]}/>
+          <FormInput type="email" name="email" placeholder="Email" required errors={['']}/>
+          <FormInput type="password" name="password" placeholder="Password Confirm" required errors={state.errors ?? []}/>
         </div>
-        <FormButton text="Create Account" loading={false}></FormButton>
+        <FormButton text="Log In"></FormButton>
       </form> 
       {/* <span onClick={handleForm}>
         <FormButton text="Post Request Test" loading={false}></FormButton>

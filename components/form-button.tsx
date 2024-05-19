@@ -1,14 +1,19 @@
-interface FormButton {
-  text: string
-  loading: boolean
-}
+"use client";
+import { useFormStatus } from "react-dom";
 
-function FormButton({text, loading}: FormButton) {
+interface FormButtonInterface {
+  text: string
+  // loading: boolean -> useFormStatus훅이 로딩 상태를 알려주기 때문에 필요가 없다.
+} 
+
+function FormButton({text}: FormButtonInterface) {
+  const {pending} = useFormStatus(); // 이 훅은 반드시 form태그의 하위에서 사용되어야 한다.
   return (
     <button  
-    disabled={loading}
-    className="primary-btn h-10 disabled:bg-neutral-200 disabled:text-gray-400 disabled:cursor-not-allowed">
-      {loading?"Loading...":text}
+    className="primary-btn h-10 disabled:bg-neutral-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+    disabled={pending}
+    >
+      {pending ? "로딩 중...":text}
     </button>
   )
 }

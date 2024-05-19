@@ -4,8 +4,8 @@ import { ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
 import { BeakerIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import FormInput from "../../components/inputs/form-input";
-import FormButton from "../../components/form-button";
 import SocialLogin from "../../components/social-login";
+import FormButton from "../../components/form-button";
 
 function CreateAccount() {
   return (
@@ -16,12 +16,12 @@ function CreateAccount() {
       </div>
       <form className="flex flex-col gap-3">
         <div>
-          <FormInput type="email" placeholder="Email" required errors={["필수 입력"]} />
-          <FormInput type="text" placeholder="User Name" required errors={["필수 입력"]} />
-          <FormInput type="password" placeholder="Password" required errors={["필수 입력"]} />
-          <FormInput type="password" placeholder="Password Confirm" required errors={["필수 입력"]} />
+          <FormInput type="email" placeholder="Email" required errors={["필수 입력"]} name={""} />
+          <FormInput type="text" placeholder="User Name" required errors={["필수 입력"]} name={""} />
+          <FormInput type="password" placeholder="Password" required errors={["필수 입력"]} name={""} />
+          <FormInput type="password" placeholder="Password Confirm" required errors={["필수 입력"]} name={""} />
         </div>
-        <FormButton text="Create Account" loading={true}></FormButton>
+        <FormButton text="Create Account"></FormButton>
       </form> 
       <SocialLogin></SocialLogin>
     </div>

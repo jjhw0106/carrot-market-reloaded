@@ -21,9 +21,9 @@ export default function FormInput({type, placeholder, required, errors, name}: F
     />
     {errors.map(
       (error, index)=>
-        <span key={index} className="text-red-500 font-medium invisible peer-invalid:visible">
+        <div key={index} className="text-red-500 font-medium invisible peer-invalid:visible">
           {error}
-        </span>
+        </div>
     )}
   </div>
 }
