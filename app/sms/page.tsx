@@ -1,3 +1,4 @@
+import FormButton from "@/components/form-button";
 import FormButtonInterface from "@/components/form-button";
 import FormInput from "@/components/inputs/form-input";
 import SocialLogin from "@/components/social-login";
@@ -14,7 +15,7 @@ export default function SMSLogin() {
           <FormInput type="number" name="phone" placeholder="Phone number" required errors={["필수 입력"]} />
           <FormInput type="number" name="code" placeholder="Verification Code" required errors={["필수 입력"]} />
         </div>
-        <FormButton text="Verify" loading={false}></FormButton>
+        <FormButton text="Verify" ></FormButton>
       </form> 
     </div>
   )

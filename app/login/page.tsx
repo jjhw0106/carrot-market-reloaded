@@ -22,8 +22,6 @@ function Login() {
   //   })
   //   console.log(await response)
   // };
-
-  
   const [state, action] = useFormState(handleForm, {msg: 'error'} as any)
 
   return(
@@ -34,14 +32,11 @@ function Login() {
       </div>
       <form action={action} className="flex flex-col gap-3">
         <div className="flex flex-col gap-3">
-          <FormInput type="email" name="email" placeholder="Email" required errors={['']}/>
-          <FormInput type="password" name="password" placeholder="Password Confirm" required errors={state.errors ?? []}/>
+          <FormInput type="email" name="email" placeholder="Email" required/>
+          <FormInput type="password" name="password" placeholder="Password Confirm" required />
         </div>
         <FormButton text="Log In"></FormButton>
       </form> 
-      {/* <span onClick={handleForm}>
-        <FormButton text="Post Request Test" loading={false}></FormButton>
-      </span> */}
       <SocialLogin></SocialLogin>
     </div>
   )

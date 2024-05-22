@@ -2,11 +2,11 @@ interface FormInputPorps {
   type: string;
   placeholder: string;
   required: boolean;
-  errors: string[];
+  errors?: string[];
   name: string
 }
 
-export default function FormInput({type, placeholder, required, errors, name}: FormInputPorps) {
+export default function FormInput({type, placeholder, required, errors=[], name}: FormInputPorps) {
   return <div>
     <input className="
       bg-transparent
