@@ -1,7 +1,7 @@
 "use client";
-import FormButton from "@/components/form-button";
-import FormButtonInterface from "@/components/form-button";
-import FormInput from "@/components/inputs/form-input";
+import Button from "@/components/button";
+import FormButtonInterface from "@/components/button";
+import Input from "@/components/inputs/input";
 import SocialLogin from "@/components/social-login";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -32,10 +32,10 @@ function Login() {
       </div>
       <form action={action} className="flex flex-col gap-3">
         <div className="flex flex-col gap-3">
-          <FormInput type="email" name="email" placeholder="Email" required/>
-          <FormInput type="password" name="password" placeholder="Password Confirm" required />
+          <Input type="email" name="email" placeholder="Email" required/>
+          <Input type="password" name="password" placeholder="Password Confirm" required />
         </div>
-        <FormButton text="Log In"></FormButton>
+        <Button text="Log In"></Button>
       </form> 
       <SocialLogin></SocialLogin>
     </div>

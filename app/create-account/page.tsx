@@ -1,13 +1,14 @@
 "use client";
 
-import FormInput from "../../components/inputs/form-input";
+import Input from "../../components/inputs/input";
 import SocialLogin from "../../components/social-login";
-import FormButton from "../../components/form-button";
+import Button from "../../components/button";
 import { useFormState } from "react-dom";
 import { createAccount } from "./actions";
 
 function CreateAccount() {
   const [state, action] = useFormState(createAccount, null);
+  console.log("state");
   return (
     <div className="flex flex-col gap-10 py-8 px-6">
       <div className="flex flex-col gap-2 *:font-medium">
@@ -20,12 +21,38 @@ function CreateAccount() {
       </div>
       <form className="flex flex-col gap-3" action={action}>
         <div>
-          <FormInput type="email" placeholder="Email" required name={"email"} />
-          <FormInput type="text" placeholder="User Name" required name={"user_name"} />
-          <FormInput type="password" placeholder="Password" required name={"password"} />
-          <FormInput type="confirm" placeholder="Password Confirm" required name={"password_confirm"} />
+          <Input 
+            type="email" 
+            placeholder="Email" 
+            required 
+            name={"email"} 
+            errors={state?.fieldErrors.email} 
+          />
+          <Input 
+            type="text" 
+            placeholder="User Name" 
+            required 
+            name={"user_name"} 
+            errors={state?.fieldErrors.user_name} 
+            minLength={5}
+            maxLength={10}
+          />
+          <Input 
+            type="password" 
+            placeholder="Password" 
+            required 
+            name={"password"} 
+            errors={state?.fieldErrors.password} 
+          />
+          <Input 
+            type="password"
+            placeholder="Password Confirm" 
+            required 
+            name={"password_confirm"} 
+            errors={state?.fieldErrors.password_confirm} 
+          />
         </div>
-        <FormButton text="Create Account"></FormButton>
+        <Button text="Create Account"></Button>
       </form> 
       <SocialLogin></SocialLogin>
     </div>

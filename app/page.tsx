@@ -2,7 +2,7 @@ import Image from "next/image";
 import TailwindCard from "../components/card";
 import Search from "../components/search";
 import List from "../components/list";
-import Button from "../components/form-button";
+import Button from "../components/button";
 import Login from "./login/page";
 import CreateAccount from "./create-account/page";
 import Link from "next/link";

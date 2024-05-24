@@ -1,6 +1,6 @@
-import FormButton from "@/components/form-button";
-import FormButtonInterface from "@/components/form-button";
-import FormInput from "@/components/inputs/form-input";
+import Button from "@/components/button";
+import FormButtonInterface from "@/components/button";
+import Input from "@/components/inputs/input";
 import SocialLogin from "@/components/social-login";
 
 export default function SMSLogin() {
@@ -12,10 +12,10 @@ export default function SMSLogin() {
       </div>
       <form className="flex flex-col gap-3">
         <div className="flex flex-col gap-3">
-          <FormInput type="number" name="phone" placeholder="Phone number" required errors={["필수 입력"]} />
-          <FormInput type="number" name="code" placeholder="Verification Code" required errors={["필수 입력"]} />
+          <Input type="number" name="phone" placeholder="Phone number" required errors={["필수 입력"]} />
+          <Input type="number" name="code" placeholder="Verification Code" required errors={["필수 입력"]} />
         </div>
-        <FormButton text="Verify" ></FormButton>
+        <Button text="Verify" ></Button>
       </form> 
     </div>
   )
