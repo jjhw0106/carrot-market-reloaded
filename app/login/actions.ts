@@ -3,6 +3,7 @@
 import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR_MSG } from "@/lib/constants";
 import { z } from "zod";
 
+
 const formSchema = z.object({
   email: z.string().email(),
   password: z
