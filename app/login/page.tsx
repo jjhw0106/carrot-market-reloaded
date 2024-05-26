@@ -6,7 +6,7 @@ import SocialLogin from "@/components/social-login";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useFormState, useFormStatus } from "react-dom";
-import { handleForm } from "./actions";
+import { login } from "./actions";
 
 function Login() {
 
@@ -22,18 +22,31 @@ function Login() {
   //   })
   //   console.log(await response)
   // };
-  const [state, action] = useFormState(handleForm, {msg: 'error'} as any)
-
+  const [state, dispatch] = useFormState(login, null)
+  const typeOfState = typeof(state);
+  console.log(state);
   return(
     <div className="flex flex-col gap-10 py-8 px-6">
       <div className="flex flex-col gap-2 *:font-medium">
         <h1 className="text-2xl">안녕하세요!</h1>
         <h2 className="text-xl">Fill in the form below to join!</h2>
       </div>
-      <form action={action} className="flex flex-col gap-3">
+      <form action={dispatch} className="flex flex-col gap-3">
         <div className="flex flex-col gap-3">
-          <Input type="email" name="email" placeholder="Email" required/>
-          <Input type="password" name="password" placeholder="Password Confirm" required />
+        <Input 
+          type="email" 
+          name="email" 
+          placeholder="Email" 
+          required 
+          errors={state?.fieldErrors.email}
+        />
+        <Input 
+          type="password" 
+          name="password" 
+          placeholder="Password" 
+          required 
+          errors={state?.fieldErrors.password}  
+        />
         </div>
         <Button text="Log In"></Button>
       </form> 

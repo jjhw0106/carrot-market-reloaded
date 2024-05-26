@@ -1,4 +1,5 @@
 "use server";
+import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR_MSG } from "@/lib/constants";
 import {z} from "zod";
 
 function validateUsername(username:string) {
@@ -9,10 +10,6 @@ function validatePassword(object: { password:string, password_confirm:string}) {
   return object.password === object.password_confirm ? true : false;
 }
 
-const passwordRegex = new RegExp(
-  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$/
-  );
-
 const accountSchema = 
 z.object({
   email: z.string({}).email(),
@@ -22,7 +19,7 @@ z.object({
     .min(5).max(10) 
     .refine(validateUsername, "no potato")
     .transform(username=>`${username}fuck`),
-  password: z.string().min(6, "password는 6자 이상 적어주세요").regex(passwordRegex, "대소문자 및 특수문자 포함해야돼"),
+  password: z.string().min(PASSWORD_MIN_LENGTH, "password는 4자 이상 적어주세요").regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR_MSG),
   password_confirm: z.string()
 })
   .refine(validatePassword, {
