@@ -1,12 +1,6 @@
-import Image from "next/image";
-import TailwindCard from "../components/card";
-import Search from "../components/search";
-import List from "../components/list";
-import Button from "../components/button";
-import Login from "./login/page";
-import CreateAccount from "./create-account/page";
 import Link from "next/link";
-import SocialLogin from "@/components/social-login";
+import db from "@/lib/db";
+import "@/lib/db";
 
 export default function Home() {
   return (
