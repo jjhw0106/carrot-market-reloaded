@@ -12,19 +12,6 @@ function validatePassword(object: { password:string, password_confirm:string}) {
   return object.password === object.password_confirm ? true : false;
 }
 
-// async function checkDuplicateBy(field: keyof Prisma.UserWhereUniqueInput, value: any) {
-//   const whereClause: Prisma.UserWhereUniqueInput = { [field]: value } as Prisma.UserWhereUniqueInput;
-//   // userId 중첩 여부 확인
-//   const result = await db.user.findUnique({
-//     select: {
-//       id: true
-//     },
-//     where: whereClause
-//   });
-  
-//   return Boolean(!result);
-// }
-
 async function prismaDynamicCondition(field: keyof Prisma.UserWhereUniqueInput, value: any) {
   const whereClause: Prisma.UserWhereUniqueInput = { [field]: value } as Prisma.UserWhereUniqueInput;
   const result = await db.user.findUnique({
@@ -50,6 +37,11 @@ async function checkDuplicateEmail(email: string) {
   const result = await prismaDynamicCondition(condition, email);
   
   return Boolean(!result)
+}
+
+async function encryptPassword(password: string) {
+  console.log(password);
+  return
 }
 
 const accountSchema = 
@@ -78,14 +70,18 @@ export async function createAccount(prevState:any, formData: FormData) {
     password: formData.get('password'),
     password_confirm: formData.get('password_confirm')
   };
+
   const result = await accountSchema.safeParseAsync(data);
+  // validation 통과하지 못했을 경우
   if(!result.success) {
-    console.log(result.error.flatten());
     
     return result.error.flatten();
-  } else {
-   
-    
+  }
+  // validation 통과했을 경우 
+  else {
+    console.log(result);
+    const inputPassword = result.data.password;
+    encryptPassword(inputPassword);
     // userEmail 중첩 여부 확인
     // 둘 다 통과되면 비밀번호 hashing
     // save to db
