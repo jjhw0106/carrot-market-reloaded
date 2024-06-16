@@ -3,6 +3,12 @@ import { PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR_MSG } from "@
 import db from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import {z} from "zod";
+import bcrypt from 'bcrypt'
+import { userAgentFromString } from "next/server";
+import { emitWarning, env } from "process";
+import { cookies } from "next/headers";
+import { getIronSession } from "iron-session";
+import { redirect } from "next/navigation";
 
 function validateUsername(username:string) {
   return !username.includes("potato");
@@ -40,8 +46,11 @@ async function checkDuplicateEmail(email: string) {
 }
 
 async function encryptPassword(password: string) {
-  console.log(password);
-  return
+  const salt = parseInt('asdflkj');
+  const hashedBcrypt = await bcrypt.hash(password, salt);
+  console.log("hashed!!!")
+  console.log(hashedBcrypt);
+  return hashedBcrypt;
 }
 
 const accountSchema = 
@@ -80,11 +89,29 @@ export async function createAccount(prevState:any, formData: FormData) {
   // validation 통과했을 경우 
   else {
     console.log(result);
-    const inputPassword = result.data.password;
-    encryptPassword(inputPassword);
+    const inputPassword = await encryptPassword(result.data.password);
     // userEmail 중첩 여부 확인
     // 둘 다 통과되면 비밀번호 hashing
     // save to db
+    const savedData = {
+      username: result.data.user_name,
+      password: inputPassword,
+      email: result.data.email,
+    }
+
+    const user = await db.user.create({
+      data: savedData,
+      select: { id: true }
+    })
+
+    const cookie = await getIronSession(cookies(), {
+      cookieName: "cookie_name",
+      password: process.env.COOKIE_PASSWORD!
+    });
+    //@ts-ignore
+    cookie.id = user.id
+    await cookie.save();
+    redirect("/profile");
   }
 
   /* parse는 에러를 던져주지만, safeParse를 사용할 경우 throw없이 result로 받을 수 있다. */
