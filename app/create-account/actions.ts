@@ -9,6 +9,7 @@ import { emitWarning, env } from "process";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import { redirect } from "next/navigation";
+import getSession from "@/lib/session";
 
 function validateUsername(username:string) {
   return !username.includes("potato");
@@ -48,8 +49,6 @@ async function checkDuplicateEmail(email: string) {
 async function encryptPassword(password: string) {
   const salt = parseInt('asdflkj');
   const hashedBcrypt = await bcrypt.hash(password, salt);
-  console.log("hashed!!!")
-  console.log(hashedBcrypt);
   return hashedBcrypt;
 }
 
@@ -67,10 +66,10 @@ z.object({
   password: z.string().min(PASSWORD_MIN_LENGTH, "password는 4자 이상 적어주세요").regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR_MSG),
   password_confirm: z.string()
 })
-  .refine(validatePassword, {
-    message:"both should be same",
-    path: ["password_confirm"]
-  })
+.refine(validatePassword, {
+  message:"both should be same",
+  path: ["password_confirm"]
+})
 
 export async function createAccount(prevState:any, formData: FormData) {
   const data = {
@@ -88,7 +87,6 @@ export async function createAccount(prevState:any, formData: FormData) {
   }
   // validation 통과했을 경우 
   else {
-    console.log(result);
     const inputPassword = await encryptPassword(result.data.password);
     // userEmail 중첩 여부 확인
     // 둘 다 통과되면 비밀번호 hashing
@@ -103,14 +101,10 @@ export async function createAccount(prevState:any, formData: FormData) {
       data: savedData,
       select: { id: true }
     })
-
-    const cookie = await getIronSession(cookies(), {
-      cookieName: "cookie_name",
-      password: process.env.COOKIE_PASSWORD!
-    });
-    //@ts-ignore
-    cookie.id = user.id
-    await cookie.save();
+    
+    const session = await getSession();
+    session.id = user.id
+    await session.save();
     redirect("/profile");
   }
 
