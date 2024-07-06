@@ -11,9 +11,6 @@ import { getIronSession } from "iron-session";
 import { redirect } from "next/navigation";
 import getSession from "@/lib/session";
 
-function validateUsername(username:string) {
-  return !username.includes("potato");
-}
 
 function validatePassword(object: { password:string, password_confirm:string}) {
   return object.password === object.password_confirm ? true : false;
@@ -54,22 +51,51 @@ async function encryptPassword(password: string) {
 
 const accountSchema = 
 z.object({
-  email: z.string({}).email()
-    .refine(checkDuplicateEmail, "중복된 이메일입니다."),
+  email: z.string({}).email(),
+    // .refine(checkDuplicateEmail, "중복된 이메일입니다."),
   user_name: z.string()
     .toLowerCase()
     .trim()
     .min(5).max(10)  
-    .refine(validateUsername, "no potato")
-    .refine(checkDuplicateUsername, "존재하는 아이디입니다.")
+    // .refine(checkDuplicateUsername, "존재하는 아이디입니다.")
     .transform(username=>`${username}`),
   password: z.string().min(PASSWORD_MIN_LENGTH, "password는 4자 이상 적어주세요").regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR_MSG),
   password_confirm: z.string()
+})
+.superRefine(async ({email}, ctx) => {
+  const user = await db.user.findUnique({
+    where: {
+      email
+    },
+    select: {
+      
+    }
+  })
+})
+.superRefine(async ({user_name}, ctx)=> {
+  const user = await db.user.findUnique({
+    where: {
+      username: user_name
+    },
+    select: {
+      id: true,
+    }
+  });
+  if (user) {
+    ctx.addIssue({
+      code: "custom",
+      message: "이미 사용중인 유저명입니다.",
+      path: ['user_name'],
+      fatal: true
+    });
+    return z.NEVER;
+  }
 })
 .refine(validatePassword, {
   message:"both should be same",
   path: ["password_confirm"]
 })
+// 인자1 : zod object, 인자2 : refinementCtx(에러메시지 리스트)
 
 export async function createAccount(prevState:any, formData: FormData) {
   const data = {
@@ -82,7 +108,7 @@ export async function createAccount(prevState:any, formData: FormData) {
   const result = await accountSchema.safeParseAsync(data);
   // validation 통과하지 못했을 경우
   if(!result.success) {
-    
+    console.log(result.error.flatten());
     return result.error.flatten();
   }
   // validation 통과했을 경우 
